@@ -47,8 +47,8 @@
     
     - name: Create target host and add it to inventory 
       add_host:
-        name : "{{host_ip}}"
-        ansible_host: "logstash"
+        name : "logstash"
+        ansible_host: "{{host_ip}}"
         groups: ELK
         ansible_user: "{{host_user}}"
         ansible_password: "{{host_password}}"
