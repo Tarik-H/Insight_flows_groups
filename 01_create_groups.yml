@@ -54,8 +54,7 @@
         ansible_password: "{{host_password}}"
         #inventory_dir: "./hosts"
       register: newly_created
-    - debug:
-        msg: "{{groups['ELK']}}"
+    - debug: var=groups['ELK']
 
 - name: Copy file to data processing pipeline host
   hosts: ELK
