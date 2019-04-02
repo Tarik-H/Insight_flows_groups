@@ -52,6 +52,7 @@
         groups: ELK
         ansible_user: "{{host_user}}"
         ansible_password: "{{host_password}}"
+        inventory_dir: "./hosts"
       register: newly_created
 
 
