@@ -1,0 +1,70 @@
+---
+- name: Create data from Excel file
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+
+  tasks:
+
+    - name: Delete data directories
+      file:
+        path: ./{{item}}
+        state: absent
+      with_items:
+        - 'data'
+        - 'data'
+
+    - name: Create data directories
+      file:
+        path: ./data
+        state: directory
+
+    - name: Copy & prepare the uploaded input Excel file
+      copy:
+        src: "{{excel_filepath}}/"
+        dest: "./data/{{excel_filename}}"
+
+    - name: Initialize the excel file to use the input data
+      xls_to_facts:
+        src: "./data/{{excel_filename}}"
+      tags:
+        - excel
+    
+    - name: Create data model from spreadsheet subnets
+      template:
+        src: "./templates/01_data_model.j2"
+        dest: "./data/subnets.yml"
+
+    - name: load data
+      include_vars:
+        file: "./data/subnets.yml"
+
+    - name: Create filter config file from data
+      template:
+        src: "./templates/02_filter_config.j2"
+        dest: "./data/20_filter_91_post_process.logstash.conf"
+    
+    - name: Create target host and add it to inventory 
+      add_host:
+        name : "logstash_instance"
+        hostname: "{{host_ip}}"
+        groups: ELK
+        ansible_user: "{{host_user}}"
+        ansible_password: "{{host_password}}"
+
+
+- name: Copy file to data processing pipeline host
+  hosts: logstash_instance
+  connection: local
+  gather_facts: false
+
+
+  tasks:
+
+    - name: Copy filter config file to target /conf.d 
+      copy:
+        src: "./data/20_filter_91_post_process.logstash.conf"
+        dest: "/etc/logstash/elastiflow/conf.d"
+        force: yes
+
