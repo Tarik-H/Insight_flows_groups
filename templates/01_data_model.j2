@@ -12,7 +12,6 @@ custom_apps:
     - "{{i.Host_IP_address|ipaddr}}"
 {% endfor %}
 {% endfor                   %}
-
 {% set lannet= [] %}
 lan_networks:
 {% for net in lan_net if (net.LAN_network|ipaddr) and (net.identifier) and (net.identifier not in lannet) %}
@@ -22,7 +21,6 @@ lan_networks:
   - "{{i.LAN_network|ipaddr}}"
 {% endfor %}
 {% endfor                 %}
-
 {% set dnet= [] %}
 dc_networks:
 {% for net in dc_net if (net.DC_network|ipaddr) and (net.identifier) and (net.identifier not in dnet) %}

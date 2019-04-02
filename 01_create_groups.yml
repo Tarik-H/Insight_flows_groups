@@ -55,7 +55,7 @@
 
 
 - name: Copy file to data processing pipeline host
-  hosts: logstash_instance
+  hosts: ELK
   connection: local
   gather_facts: false
 
