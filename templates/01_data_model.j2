@@ -17,7 +17,7 @@ custom_apps:
 lan_networks:
 {% for net in lan_net if (net.LAN_network|ipaddr) and (net.identifier) and (net.identifier not in lannet) %}
 {{lannet.append(net.identifier)}}
-  {{net.identifier}}
+  {{net.identifier}}:
 {% for i in lan_net if (i.identifier|lower==net.identifier|lower)%}
   - "{{i.LAN_network|ipaddr}}"
 {% endfor %}
@@ -27,7 +27,7 @@ lan_networks:
 dc_networks:
 {% for net in dc_net if (net.DC_network|ipaddr) and (net.identifier) and (net.identifier not in dnet) %}
 {{dnet.append(net.identifier)}}
-  {{net.identifier}}
+  {{net.identifier}}:
 {% for i in dc_net if (i.identifier|lower==net.identifier|lower)%}
     - "{{i.DC_network|ipaddr}}"
 {%endfor%}  
