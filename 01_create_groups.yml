@@ -47,14 +47,15 @@
     
     - name: Create target host and add it to inventory 
       add_host:
-        name : "logstash_instance"
+        name : "{{host_ip}}"
         ansible_host: "{{host_ip}}"
         groups: ELK
         ansible_user: "{{host_user}}"
         ansible_password: "{{host_password}}"
         inventory_dir: "./hosts"
       register: newly_created
-
+    - debug:
+        msg: var=vars
 
 - name: Copy file to data processing pipeline host
   hosts: ELK
