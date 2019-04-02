@@ -52,6 +52,7 @@
         groups: ELK
         ansible_user: "{{host_user}}"
         ansible_password: "{{host_password}}"
+      register: newly_created
 
 
 - name: Copy file to data processing pipeline host
