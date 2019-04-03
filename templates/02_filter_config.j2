@@ -2,7 +2,7 @@
 filter {
   # Logic to add IP groups and possibly sites.
 # Logic to add IP src and dst groups
-    if [flow][server_addr] or [flow][client_addr]{
+    if [flow][server_addr] or [flow][client_addr] {
 {% if custom_apps %}
 {%for k,v in custom_apps.iteritems() %}
 {% if k and v %}
