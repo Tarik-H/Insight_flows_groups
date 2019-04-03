@@ -62,7 +62,7 @@
     
 
 - name: Copy file to data processing pipeline host
-  hosts: ELK
+  hosts: "{{host_ip}}"
   #connection: local
   gather_facts: false
 
