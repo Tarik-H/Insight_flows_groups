@@ -3,9 +3,9 @@ filter {  to add IP groups and possibly sites.
   # Logic to add IP groups and possibly sites.
 # Logic to add IP src and dst groups
     if [flow][server_addr] or [flow][client_addr]{
-{%if custom_apps %}
+{% if custom_apps %}
 {%for k,v in custom_apps.iteritems() %}
-  {% if k and v %}
+{% if k and v %}
         cidr {
           id => "elastiflow_cust_src_grp_{{k}}"
           address => [ "%{[flow][client_addr]}" ]
@@ -22,12 +22,12 @@ filter {  to add IP groups and possibly sites.
             "[flow][dst_grp]" => "{{k}}"
           }
         }
-  {%endif%}
+{%endif%}
 {%endfor%}
 {%endif%}
-{%if dc_networks %}
+{% if dc_networks %}
 {%for k,v in dc_networks.iteritems() %}
-  {% if k and v %}
+{% if k and v %}
         cidr {
           id => "elastiflow_cust_src_grp_{{k}}"
           address => [ "%{[flow][client_addr]}" ]
@@ -44,12 +44,12 @@ filter {  to add IP groups and possibly sites.
             "[flow][dst_grp]" => "{{k}}"
           }
         }
-  {%endif%}
+{%endif%}
 {%endfor%}
 {%endif%}
-{%if lan_networks %}
+{% if lan_networks %}
 {%for k,v in lan_networks.iteritems() %}
-  {% if k and v %}
+{% if k and v %}
         cidr {
           id => "elastiflow_cust_src_grp_{{k}}"
           address => [ "%{[flow][client_addr]}" ]
@@ -66,7 +66,7 @@ filter {  to add IP groups and possibly sites.
             "[flow][dst_grp]" => "{{k}}"
           }
         }
-  {%endif%}
+{%endif%}
 {%endfor%}
 {%endif%}
     }
