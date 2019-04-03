@@ -57,14 +57,16 @@
     - name: copy to inventory
       lineinfile:
         path: "./hosts"
-        line: "{{item}}"
-      with_items: 
-        - "[ELK]"
-        - "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
-       
+        line: "[ELK]"
+
+    - name: copy to inventory
+      lineinfile:
+        path: "./hosts"
+        line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
+    
 
 - name: Copy file to data processing pipeline host
-  hosts: logstash
+  hosts: ELK
   #connection: local
   gather_facts: false
 
