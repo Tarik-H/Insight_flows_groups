@@ -54,10 +54,6 @@
     #     ansible_password: "{{host_password}}"
     #     #inventory_dir: "./hosts"
     #   register: newly_created
-    - name: copy to inventory
-      lineinfile:
-        path: "./hosts"
-        line: "[ELK]"
 
     - name: copy to inventory
       lineinfile:
