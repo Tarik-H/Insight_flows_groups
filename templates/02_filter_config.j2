@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 filter {
   # Logic to add IP groups and possibly sites.
-# Logic to add IP src and dst groups
+  # Logic to add IP src and dst groups
     if [flow][server_addr] or [flow][client_addr] {
 {% if custom_apps %}
 {%for k,v in custom_apps.iteritems() %}
@@ -17,7 +17,7 @@ filter {
         cidr {
           id => "elastiflow_cust_dst_grp_{{k}}"
           address => [ "%{[flow][server_addr]}" ]
-          network => {%for i in v %}"{{i}}/32"{%if not loop.last%},{%endif%}{%endfor%}]
+          network => [{%for i in v %}"{{i}}/32"{%if not loop.last%},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_grp]" => "{{k}}"
           }
@@ -39,7 +39,7 @@ filter {
         cidr {
           id => "elastiflow_cust_dst_grp_{{k}}"
           address => [ "%{[flow][server_addr]}" ]
-          network => {%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          network => [{%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_grp]" => "{{k}}"
           }
@@ -61,7 +61,7 @@ filter {
         cidr {
           id => "elastiflow_cust_dst_grp_{{k}}"
           address => [ "%{[flow][server_addr]}" ]
-          network => {%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          network => [{%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_grp]" => "{{k}}"
           }
