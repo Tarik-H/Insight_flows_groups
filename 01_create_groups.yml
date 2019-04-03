@@ -55,14 +55,14 @@
     #     #inventory_dir: "./hosts"
     #   register: newly_created
 
-    - name: copy to inventory
-      lineinfile:
-        path: "./hosts"
-        line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
+    # - name: copy to inventory
+    #   lineinfile:
+    #     path: "./hosts"
+    #     line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
     
 
 - name: Copy file to data processing pipeline host
-  hosts: "{{host_ip}}"
+  hosts: ELK
   #connection: local
   gather_facts: false
 
