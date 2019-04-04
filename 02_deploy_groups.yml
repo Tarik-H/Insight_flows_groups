@@ -1,6 +1,6 @@
 ---
 - name: Copy filter file to data processing pipeline host
-  hosts: logstash
+  hosts: ELK
   remote_user: root
   #connection: local
   #gather_facts: yes
