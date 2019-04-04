@@ -54,6 +54,9 @@
       lineinfile:
         path: "./hosts"
         line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}} ansible_become_pass={{host_password}}"
+    
+    - name: Clear gathered facts from all currently targeted hosts
+      meta: clear_facts
 
     # - name: Create target host and add it to inventory 
     #   add_host:
