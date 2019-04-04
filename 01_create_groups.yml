@@ -53,7 +53,7 @@
     - name: copy to inventory
       lineinfile:
         path: "./hosts"
-        line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
+        line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}} ansible_become_pass={{host_password}}"
 
     # - name: Create target host and add it to inventory 
     #   add_host:

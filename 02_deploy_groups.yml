@@ -12,4 +12,3 @@
         force: yes
       become: yes
       become_user: root
-      ansible_become_pass: "{{host_password}}"
