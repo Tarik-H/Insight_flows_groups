@@ -63,8 +63,9 @@
 
 - name: Copy file to data processing pipeline host
   hosts: logstash
+  remote_user: root
   #connection: local
-  gather_facts: false
+  gather_facts: yes
 
   tasks:
     #- debug: var=vars
