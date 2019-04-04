@@ -60,7 +60,8 @@
         #inventory_dir: "./hosts"
       register: newly_created
 
-
+    - name: Refresh inventory to ensure new instaces exist in inventory
+      meta: refresh_inventory
     
 
 - name: Copy file to data processing pipeline host
