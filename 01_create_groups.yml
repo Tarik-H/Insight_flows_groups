@@ -49,26 +49,26 @@
       lineinfile:
         path: "./hosts"
         line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}}"
-        
-    - name: Create target host and add it to inventory 
-      add_host:
-        name : "logstash"
-        ansible_host: "{{host_ip}}"
-        groups: ELK
-        ansible_user: "{{host_user}}"
-        ansible_password: "{{host_password}}"
-        #inventory_dir: "./hosts"
-      register: newly_created
+
+    # - name: Create target host and add it to inventory 
+    #   add_host:
+    #     name : "logstash"
+    #     ansible_host: "{{host_ip}}"
+    #     groups: ELK
+    #     ansible_user: "{{host_user}}"
+    #     ansible_password: "{{host_password}}"
+    #     #inventory_dir: "./hosts"
+    #   register: newly_created
 
     - name: Refresh inventory to ensure new instaces exist in inventory
       meta: refresh_inventory
     
 
 - name: Copy file to data processing pipeline host
-  hosts: ELK
-  remote_user: "{{host_user}}"
+  hosts: logstash
+  remote_user: root
   #connection: local
-  gather_facts: yes
+  #gather_facts: yes
 
   tasks:
     #- debug: var=vars
