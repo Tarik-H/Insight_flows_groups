@@ -6,7 +6,7 @@
   gather_facts: no
 
   tasks:
-    - debug: var=vars
+#    - debug: var=vars
     - name: Copy filter config file to target /conf.d 
       copy:
         src: "./data/20_filter_91_post_process.logstash.conf"
