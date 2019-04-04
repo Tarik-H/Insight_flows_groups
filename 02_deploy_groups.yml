@@ -2,7 +2,7 @@
 - name: Copy filter file to data processing pipeline host
   hosts: logstash
   remote_user: root
-  #connection: local
+  connection: local
   #gather_facts: yes
 
   tasks:
