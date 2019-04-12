@@ -11,7 +11,7 @@
     - name: Copy filter config file to target /conf.d
       copy:
         src: "./data/20_filter_91_post_process.logstash.conf"
-        dest: "/etc/logstash/elastiflow/conf.d"
+        dest: "/etc/logstash/elastiflow/conf.d/"
         force: yes
       # become: yes
       # become_user: root
