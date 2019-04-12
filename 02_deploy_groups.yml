@@ -5,13 +5,13 @@
   gather_facts: no
 
   tasks:
-    # - name: Clear gathered facts from all currently targeted hosts
-    #   meta: clear_facts
-    # - name: Copy filter config file to target /conf.d
-    #   copy:
-    #     src: "./data/20_filter_91_post_process.logstash.conf"
-    #     dest: "/etc/logstash/elastiflow/conf.d"
-    #     force: yes
+    - ping:
+    - name: Clear gathered facts from all currently targeted hosts
+      meta: clear_facts
+    - name: Copy filter config file to target /conf.d
+      copy:
+        src: "./data/20_filter_91_post_process.logstash.conf"
+        dest: "/etc/logstash/elastiflow/conf.d"
+        force: yes
       # become: yes
       # become_user: root
-    - ping:
