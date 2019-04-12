@@ -2,12 +2,12 @@
 - name: Copy filter file to data processing pipeline host
   hosts: logstash
   remote_user: root
-  gather_facts: no
+  gather_facts: yes
 
   tasks:
     - ping:
-    - name: Clear gathered facts from all currently targeted hosts
-      meta: clear_facts
+    # - name: Clear gathered facts from all currently targeted hosts
+    #   meta: clear_facts
     - name: Copy filter config file to target /conf.d
       copy:
         src: "./data/20_filter_91_post_process.logstash.conf"
