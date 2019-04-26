@@ -3,7 +3,7 @@ filter {
   # Logic to add sites, groups for apps and possibly vlans.
   # Logic to add src and dst sites
     if [flow][server_addr] or [flow][client_addr] {
-{# {% if sites %}
+{% if sites %}
 {%for k,v in sites.iteritems() %}
 {% if k and v %}
         cidr {
@@ -25,7 +25,7 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
- #}  # Assign default ext site if missing
+  # Assign default ext site if missing
         if ![flow][src_site] {
            mutate {
             id => "elastiflow_add_missing_site_as_srcext"
@@ -37,7 +37,7 @@ filter {
             add_field => { "[flow][dst_site]" => "external"}
           }
         }
-{# {% if dc_vlans %}
+{% if dc_vlans %}
       # Logic to add DC vlans when available
 {%for k,v in dc_vlans.iteritems() %}
 {% if k and v %}
@@ -60,7 +60,7 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
- #}  # Assign default vlan as site if missing
+  # Assign default vlan as site if missing
         if ![flow][src_grp] {
           mutate {
             id => "elastiflow_add_missing_sgrp_as_site"
@@ -97,12 +97,12 @@ filter {
           }
         }
       # Adding clusters
-{%     for intern in v if (intern.cluster) and (intern.cluster not in app_cluster) %}
+{# {%     for intern in v if (intern.cluster) and (intern.cluster not in app_cluster) %}
 {{app_cluster.append(intern.cluster)}}
         cidr {
           id => "elastiflow_src_cluster_app:_{{K}}_{{intern.cluster}}"
           address => [ "%{[flow][client_addr]}" ]
-          network => [{%for i in v if (i.cluster|lower==intern.cluster)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          network => [{%for i in v if (i.cluster|lower==intern.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_cluster]" => "{{k}}:_{{intern.cluster}}"
           }
@@ -110,12 +110,12 @@ filter {
         cidr {
           id => "elastiflow_dst_cluster_app:_{{K}}_{{intern.cluster}}"
           address => [ "%{[flow][server_addr]}" ]
-          network => [{%for i in v if (i.cluster|lower==intern.cluster)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          network => [{%for i in v if (i.cluster|lower==intern.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
           }
         }
-{%    endfor                                                                       %}
+{%    endfor                                                                       %} #}
 {%endif%}
 {%endfor%}
 {%endif%}

@@ -12,6 +12,7 @@ sites:
     - "{{i.networks|ipaddr}}"
 {% endfor %}
 {% endfor                   %}
+
 {% set dc_temp= [] %}
 dc_vlans:
 {% for net in dc_vlans if (net.DC_network|ipaddr) and (net.DC_vlan_name) and (net.DC_vlan_name not in dc_temp) %}
@@ -21,6 +22,7 @@ dc_vlans:
     - "{{i.DC_network|ipaddr}}"
 {% endfor %}
 {% endfor                   %}
+
 {% set app_temp= [] %}
 applications:
 {% for net in cust_app if (net.Host_IP_address|ipaddr) and (net.application_name) and (net.application_name not in app_temp) %}
