@@ -3,7 +3,7 @@ filter {
   # Logic to add sites, groups for apps and possibly vlans.
   # Logic to add src and dst sites
     if [flow][server_addr] or [flow][client_addr] {
-{% if sites %}
+{# {% if sites %}
 {%for k,v in sites.iteritems() %}
 {% if k and v %}
         cidr {
@@ -25,7 +25,7 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
-  # Assign default ext site if missing
+ #}  # Assign default ext site if missing
         if ![flow][src_site] {
            mutate {
             id => "elastiflow_add_missing_site_as_srcext"
@@ -37,7 +37,7 @@ filter {
             add_field => { "[flow][dst_site]" => "external"}
           }
         }
-{% if dc_vlans %}
+{# {% if dc_vlans %}
       # Logic to add DC vlans when available
 {%for k,v in dc_vlans.iteritems() %}
 {% if k and v %}
@@ -60,7 +60,7 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
-  # Assign default vlan as site if missing
+ #}  # Assign default vlan as site if missing
         if ![flow][src_grp] {
           mutate {
             id => "elastiflow_add_missing_sgrp_as_site"
