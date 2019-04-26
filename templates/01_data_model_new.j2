@@ -5,7 +5,7 @@
 ---
 {% set sites_temp= [] %}
 sites:
-{% for net in site_net if (net.networks|ipaddr) and (net.site_identifier) and (net.site_identifier not in sites_temp) %}
+{% for net in site_net if (net.networks|ipaddr) and (net.site_identifier) and (net.site_identifier not in sites_temp) -%}
 {{sites_temp.append(net.site_identifier)}}
   {{net.site_identifier}}:
 {% for i in site_net if (i.site_identifier|lower==net.site_identifier|lower) %}
@@ -15,7 +15,7 @@ sites:
 
 {% set dc_temp= [] %}
 dc_vlans:
-{% for net in dc_vlans if (net.DC_network|ipaddr) and (net.DC_vlan_name) and (net.DC_vlan_name not in dc_temp) %}
+{% for net in dc_vlans if (net.DC_network|ipaddr) and (net.DC_vlan_name) and (net.DC_vlan_name not in dc_temp) -%}
 {{dc_temp.append(net.DC_vlan_name)}}
   {{net.DC_vlan_name}}:
 {% for i in dc_vlans if (i.DC_vlan_name|lower==net.DC_vlan_name|lower) %}
@@ -25,7 +25,7 @@ dc_vlans:
 
 {% set app_temp= [] %}
 applications:
-{% for net in cust_app if (net.Host_IP_address|ipaddr) and (net.application_name) and (net.application_name not in app_temp) %}
+{% for net in cust_app if (net.Host_IP_address|ipaddr) and (net.application_name) and (net.application_name not in app_temp) -%}
 {{app_temp.append(net.application_name)}}
   {{net.application_name}}:
 {% for i in cust_app if (i.application_name|lower==net.application_name|lower) %}
