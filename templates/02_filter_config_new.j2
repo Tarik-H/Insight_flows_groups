@@ -116,9 +116,9 @@ filter {
           }
         }
 {%    endfor                                                                       %} #}
-{%endif%}
+{# {%endif%}
 {%endfor%}
-{%endif%}
+{%endif%} #}
 {#   # Assign default apps and clusters if missing
         if ![flow][src_app] {
           mutate {
