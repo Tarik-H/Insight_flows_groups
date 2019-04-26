@@ -97,8 +97,7 @@ filter {
           }
         }
       # Adding clusters
-{%     for interna in v %}
-{% if interna.cluster %}
+{%     for interna in v if 'cluster' in interna %}
 ######## {{interna.host_ip}}
 {# {{app_cluster.append(intern.cluster)}}
         cidr {
@@ -116,8 +115,7 @@ filter {
           add_field => {
             "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
           }
-        } #}
-{%endif%}        
+        } #}  
 {%    endfor                                                                       %}
 {%endif%}
 {%endfor%}
