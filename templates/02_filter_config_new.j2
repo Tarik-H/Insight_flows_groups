@@ -97,7 +97,7 @@ filter {
           }
         }
       # Adding clusters
-{%     for interna in v %}
+{%     for interna in v if interna.cluster %}
 ######## {{interna.host_ip}}
 {# {{app_cluster.append(intern.cluster)}}
         cidr {
