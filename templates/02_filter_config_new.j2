@@ -84,7 +84,7 @@ filter {
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_app]" => "{{k}}"
-            "[flow][src_lifecycle]" => "{{v|json_query('[0].lifecycle')|string}}"
+            "[flow][src_lifecycle]" => "{{v|json_query('[*].lifecycle')|string}}"
           }
         }
         cidr {
@@ -93,12 +93,13 @@ filter {
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_app]" => "{{k}}"
-            "[flow][dst_lifecycle]" => "{{v|json_query('[0].lifecycle')|string}}"
+            "[flow][dst_lifecycle]" => "{{v|json_query('[*].lifecycle')|string}}"
           }
         }
       # Adding clusters
-{# {%     for intern in v if ((intern.cluster) and (intern.cluster not in app_cluster)) %}
-{{app_cluster.append(intern.cluster)}}
+{%     for intern in v if ((intern.cluster) and (intern.cluster not in app_cluster)) %}
+######## {{inter.cluster}}
+{# {{app_cluster.append(intern.cluster)}}
         cidr {
           id => "elastiflow_src_cluster_app:_{{K}}_{{intern.cluster}}"
           address => [ "%{[flow][client_addr]}" ]
@@ -114,8 +115,8 @@ filter {
           add_field => {
             "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
           }
-        }
-{%    endfor                                                                       %} #}
+        } #}
+{%    endfor                                                                       %}
 {%endif%}
 {%endfor%}
 {%endif%}
