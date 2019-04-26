@@ -7,34 +7,34 @@
 
   tasks:
 
-    # - name: Delete data directories
-    #   file:
-    #     path: ./{{item}}
-    #     state: absent
-    #   with_items:
-    #     - 'data'
-    #     - 'data'
+    - name: Delete data directories
+      file:
+        path: ./{{item}}
+        state: absent
+      with_items:
+        - 'data'
+        - 'data'
 
-    # - name: Create data directories
-    #   file:
-    #     path: ./data
-    #     state: directory
+    - name: Create data directories
+      file:
+        path: ./data
+        state: directory
 
-    # - name: Copy & prepare the uploaded input Excel file
-    #   copy:
-    #     src: "{{excel_filepath}}/"
-    #     dest: "./data/{{excel_filename}}"
+    - name: Copy & prepare the uploaded input Excel file
+      copy:
+        src: "{{excel_filepath}}/"
+        dest: "./data/{{excel_filename}}"
 
-    # - name: Initialize the excel file to use the input data
-    #   xls_to_facts:
-    #     src: "./data/{{excel_filename}}"
-    #   tags:
-    #     - excel
+    - name: Initialize the excel file to use the input data
+      xls_to_facts:
+        src: "./data/{{excel_filename}}"
+      tags:
+        - excel
     
-    # - name: Create data model from spreadsheet subnets
-    #   template:
-    #     src: "./templates/01_data_model_new.j2"
-    #     dest: "./data/subnets.yml"
+    - name: Create data model from spreadsheet subnets
+      template:
+        src: "./templates/01_data_model_new.j2"
+        dest: "./data/subnets.yml"
 
     - name: load data
       include_vars:
@@ -45,18 +45,18 @@
         src: "./templates/02_filter_config_new.j2"
         dest: "./data/20_filter_92_post_process.logstash.conf"
 
-#     - name: copy to inventory
-#       lineinfile:
-#         path: "./hosts"
-#         line: "[ELK]"
+    - name: copy to inventory
+      lineinfile:
+        path: "./hosts"
+        line: "[ELK]"
   
-#     - name: copy to inventory
-#       lineinfile:
-#         path: "./hosts"
-#         line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}} ansible_become_pass={{host_password}}"
+    - name: copy to inventory
+      lineinfile:
+        path: "./hosts"
+        line: "logstash ansible_host={{host_ip}} ansible_user={{host_user}} ansible_password={{host_password}} ansible_become_pass={{host_password}}"
     
-#     - name: Clear gathered facts from all currently targeted hosts
-#       meta: clear_facts
+    - name: Clear gathered facts from all currently targeted hosts
+      meta: clear_facts
 
 # #     - name: Create target host and add it to inventory 
 # #       add_host:
