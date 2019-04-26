@@ -97,25 +97,24 @@ filter {
           }
         }
       # Adding clusters
-{%     for interna in v if 'cluster' in interna %}
-######## {{interna.host_ip}}
-{# {{app_cluster.append(intern.cluster)}}
+{%     for inter in v if 'cluster' in inter and inter.cluster not in app_cluster %}
+{{app_cluster.append(inter.cluster)}}
         cidr {
-          id => "elastiflow_src_cluster_app:_{{K}}_{{intern.cluster}}"
+          id => "elastiflow_src_cluster_app:_{{K}}_{{inter.cluster}}"
           address => [ "%{[flow][client_addr]}" ]
-          network => [{%for i in v if (i.cluster|lower==intern.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          network => [{%for i in v if (i.cluster|lower==inter.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
-            "[flow][src_cluster]" => "{{k}}:_{{intern.cluster}}"
+            "[flow][src_cluster]" => "{{k}}:_{{inter.cluster}}"
           }
         }      
         cidr {
-          id => "elastiflow_dst_cluster_app:_{{K}}_{{intern.cluster}}"
+          id => "elastiflow_dst_cluster_app:_{{K}}_{{inter.cluster}}"
           address => [ "%{[flow][server_addr]}" ]
-          network => [{%for i in v if (i.cluster|lower==intern.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          network => [{%for i in v if (i.cluster|lower==inter.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
-            "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
+            "[flow][dst_cluster]" => "{{k}}:_{{inter.cluster}}"
           }
-        } #}  
+        }  
 {%    endfor                                                                       %}
 {%endif%}
 {%endfor%}
