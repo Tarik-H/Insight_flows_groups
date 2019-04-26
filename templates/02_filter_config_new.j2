@@ -97,7 +97,7 @@ filter {
           }
         }
       # Adding clusters
-{%     for intern in v if ((intern.cluster) and (intern.cluster not in app_cluster)) %}
+{# {%     for intern in v if ((intern.cluster) and (intern.cluster not in app_cluster)) %}
 {{app_cluster.append(intern.cluster)}}
         cidr {
           id => "elastiflow_src_cluster_app:_{{K}}_{{intern.cluster}}"
@@ -115,7 +115,7 @@ filter {
             "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
           }
         }
-{%    endfor                                                                       %}
+{%    endfor                                                                       %} #}
 {%endif%}
 {%endfor%}
 {%endif%}
