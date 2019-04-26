@@ -11,7 +11,12 @@
       include_vars:
         file: "./test_data.yml"
 
-    - name: Create data model from spreadsheet subnets
-      template:
-        src: "./test.j2"
-        dest: "./results.yml"
+#    - name: Create data model from spreadsheet subnets
+#      template:
+#        src: "./test.j2"
+#        dest: "./results.yml"
+
+    - name: Display all cluster names
+      debug:
+        var: item
+      loop: "{{ domain_definition | json_query('domain.cluster[*].name') }}"
