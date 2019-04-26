@@ -33,7 +33,7 @@
     
     - name: Create data model from spreadsheet subnets
       template:
-        src: "./templates/01_data_model.j2"
+        src: "./templates/01_data_model_new.j2"
         dest: "./data/subnets.yml"
 
     - name: load data
@@ -42,8 +42,8 @@
 
     - name: Create filter config file from data
       template:
-        src: "./templates/02_filter_config.j2"
-        dest: "./data/20_filter_91_post_process.logstash.conf"
+        src: "./templates/02_filter_config_new.j2"
+        dest: "./data/20_filter_92_post_process.logstash.conf"
 
     - name: copy to inventory
       lineinfile:

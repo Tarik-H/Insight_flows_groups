@@ -18,7 +18,7 @@ lan_networks:
 {{lannet.append(net.identifier)}}
   {{net.identifier}}:
 {% for i in lan_net if (i.identifier|lower==net.identifier|lower)%}
-  - "{{i.LAN_network|ipaddr}}"
+    - "{{i.LAN_network|ipaddr}}"
 {% endfor %}
 {% endfor                 %}
 {% set dnet= [] %}

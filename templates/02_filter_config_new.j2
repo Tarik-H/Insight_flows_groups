@@ -1,0 +1,156 @@
+# ansible_managed
+filter {
+  # Logic to add sites, groups for apps and possibly vlans.
+  # Logic to add src and dst sites
+    if [flow][server_addr] or [flow][client_addr] {
+{% if sites %}
+{%for k,v in sites.iteritems() %}
+{% if k and v %}
+        cidr {
+          id => "elastiflow_src_site_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_site]" => "{{k}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_cust_dst_site_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i|ipaddr}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_site]" => "{{k}}"
+          }
+        }
+{%endif%}
+{%endfor%}
+{%endif%}
+  # Assign default ext site if missing
+        if ![flow][src_site] {
+           mutate {
+            id => "elastiflow_add_missing_site_as_srcext"
+            add_field => { "[flow][src_site]" => "external"}
+          }
+        } else if ! [flow][dst_site] {
+           mutate {
+            id => "elastiflow_add_missing_site_as_dstext"
+            add_field => { "[flow][dst_site]" => "external"}
+          }
+        }
+{% if dc_vlans %}
+      # Logic to add DC vlans when available
+{%for k,v in dc_vlans.iteritems() %}
+{% if k and v %}
+        cidr {
+          id => "elastiflow_src_vlan_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_grp]" => "{{k}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_dst_vlan_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i|ipaddr}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_grp]" => "{{k}}"
+          }
+        }
+{%endif%}
+{%endfor%}
+{%endif%}
+  # Assign default vlan as site if missing
+        if ![flow][src_grp] {
+          mutate {
+            id => "elastiflow_add_missing_sgrp_as_site"
+            add_field => { "[flow][src_grp]" => "[flow][src_site]"}
+          }
+        } else if ![flow][dst_grp] {
+          mutate {
+            id => "elastiflow_add_missing_dgrp_as_site"
+            add_field => { "[flow][dst_grp]" => "[flow][dst_site]"}
+          }
+        }
+{% if applications %}
+    ## Logic to add user defined applications
+{%for k,v in applications.iteritems() %}
+{% if k and v %}
+{% set app_cluster= [] %}
+      # Adding applications
+        cidr {
+          id => "elastiflow_cust_src_app_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_app]" => "{{k}}"
+            "[flow][src_lifecycle]" => "{{i.lifecycle}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_cust_dst_app_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_app]" => "{{k}}"
+            "[flow][dst_lifecycle]" => "{{i.lifecycle}}"
+          }
+        }
+      # Adding clusters
+{%     for intern in v if (intern.cluster) and (intern.cluster not in app_cluster) %}
+{{app_cluster.append(intern.cluster)}}
+        cidr {
+          id => "elastiflow_src_cluster_app:_{{K}}_{{intern.cluster}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v if (i.cluster|lower==intern.cluster)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_cluster]" => "{{k}}:_{{intern.cluster}}"
+          }
+        }      
+        cidr {
+          id => "elastiflow_dst_cluster_app:_{{K}}_{{intern.cluster}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v if (i.cluster|lower==intern.cluster)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_cluster]" => "{{k}}:_{{intern.cluster}}"
+          }
+        }
+{%    endfor                                                                       %}
+{%endif%}
+{%endfor%}
+{%endif%}
+  # Assign default apps and clusters if missing
+        if ![flow][src_app] {
+          mutate {
+            id => "elastiflow_add_missing_src_app_w_vlan_or_site"
+            add_field => { 
+              "[flow][src_app]" => "[flow][src_grp]"
+            }
+          }
+        } else if ![flow][dst_app] {
+          mutate {
+            id => "elastiflow_add_missing_dst_app_w_vlan_or_site"
+            add_field => { 
+              "[flow][dst_app]" => "[flow][dst_grp]"
+            }
+          }
+        }
+        if ![flow][src_cluster] {
+          mutate {
+            id => "elastiflow_add_missing_src_cluster_w_app"
+            add_field => { 
+              "[flow][src_cluster]" => "[flow][src_app]"
+            }
+          }
+        } else if ![flow][dst_cluster] {
+          mutate {
+            id => "elastiflow_add_missing_src_cluster_w_app"
+            add_field => { 
+              "[flow][dst_cluster]" => "[flow][dst_app]"
+            }
+          }
+        }
+  }
+}
+
+

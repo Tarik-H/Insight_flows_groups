@@ -1,0 +1,7 @@
+applications:
+  app1:
+    - { server: "1.1.1.1", lc: "prod", cluster: "web"}
+    - { server: "2.2.2.2", lc: "dev", cluster: "AD"}
+  app2:
+    - { server: "11.1.1.1", lc: "prod", cluster: "sql"}
+    - { server: "22.2.2.2", lc: "dev", cluster: "AD"}

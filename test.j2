@@ -1,0 +1,8 @@
+{%for k,v in applications.iteritems() %}
+{%if k and v %}
+{{k}}:
+{% for i in v %}
+   {{i.server|ipaddr('host')}}
+{% endfor %}
+{%endif%}
+{%endfor%}

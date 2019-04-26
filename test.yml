@@ -1,0 +1,17 @@
+---
+- name: Create data from Excel file
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+
+  tasks:
+
+    - name: load data
+      include_vars:
+        file: "./test_data.yml"
+
+    - name: Create data model from spreadsheet subnets
+      template:
+        src: "./test.j2"
+        dest: "./results.yml"
