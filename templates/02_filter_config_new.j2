@@ -64,12 +64,12 @@ filter {
         if ![flow][src_grp] {
           mutate {
             id => "elastiflow_add_missing_sgrp_as_site"
-            add_field => { "[flow][src_grp]" => "[flow][src_site]"}
+            add_field => { "[flow][src_grp]" => "%{[flow][src_site]}" }
           }
         } else if ![flow][dst_grp] {
           mutate {
             id => "elastiflow_add_missing_dgrp_as_site"
-            add_field => { "[flow][dst_grp]" => "[flow][dst_site]"}
+            add_field => { "[flow][dst_grp]" => "%{[flow][dst_site]}" }
           }
         }
 {% if applications %}
@@ -126,14 +126,14 @@ filter {
           mutate {
             id => "elastiflow_add_missing_src_app_w_vlan_or_site"
             add_field => { 
-              "[flow][src_app]" => "[flow][src_grp]"
+              "[flow][src_app]" => "%{[flow][src_grp]}"
             }
           }
         } else if ![flow][dst_app] {
           mutate {
             id => "elastiflow_add_missing_dst_app_w_vlan_or_site"
             add_field => { 
-              "[flow][dst_app]" => "[flow][dst_grp]"
+              "[flow][dst_app]" => "%{[flow][dst_grp]}"
             }
           }
         }
@@ -141,14 +141,14 @@ filter {
           mutate {
             id => "elastiflow_add_missing_src_cluster_w_app"
             add_field => { 
-              "[flow][src_cluster]" => "[flow][src_app]"
+              "[flow][src_cluster]" => "%{[flow][src_app]}"
             }
           }
         } else if ![flow][dst_cluster] {
           mutate {
             id => "elastiflow_add_missing_dst_cluster_w_app"
             add_field => { 
-              "[flow][dst_cluster]" => "[flow][dst_app]"
+              "[flow][dst_cluster]" => "%{[flow][dst_app]}"
             }
           }
         }
