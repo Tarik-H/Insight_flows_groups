@@ -97,7 +97,7 @@ filter {
           }
         }
       # Adding clusters
-{%     for interna in v if (interna.cluster) and (interna.cluster not in app_cluster) %}
+{%     for interna in v if (interna['cluster']) and (interna.['cluster'] not in app_cluster) %}
 ######## {{interna}}
 {# {{app_cluster.append(intern.cluster)}}
         cidr {
