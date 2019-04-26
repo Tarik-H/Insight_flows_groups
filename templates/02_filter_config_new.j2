@@ -84,7 +84,7 @@ filter {
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_app]" => "{{k}}"
-            "[flow][src_lifecycle]" => "{{v|json_query('[*].lifecycle')}}"
+            "[flow][src_lifecycle]" => "{{v|json_query('[0].lifecycle')|string}}"
           }
         }
         cidr {
@@ -93,7 +93,7 @@ filter {
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_app]" => "{{k}}"
-            "[flow][dst_lifecycle]" => "{{v|json_query('[*].lifecycle')}}"
+            "[flow][dst_lifecycle]" => "{{v|json_query('[0].lifecycle')|string}}"
           }
         }
       # Adding clusters
