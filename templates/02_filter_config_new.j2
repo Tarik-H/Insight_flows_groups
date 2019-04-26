@@ -72,7 +72,7 @@ filter {
             add_field => { "[flow][dst_grp]" => "[flow][dst_site]"}
           }
         }
-{% if applications %}
+{# {% if applications %}
     ## Logic to add user defined applications
 {%for k,v in applications.iteritems() %}
 {% if k and v %}
@@ -96,7 +96,7 @@ filter {
             "[flow][dst_lifecycle]" => "{{i.lifecycle}}"
           }
         }
-      # Adding clusters
+      # Adding clusters #}
 {# {%     for intern in v if (intern.cluster) and (intern.cluster not in app_cluster) %}
 {{app_cluster.append(intern.cluster)}}
         cidr {
@@ -119,7 +119,7 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
-  # Assign default apps and clusters if missing
+{#   # Assign default apps and clusters if missing
         if ![flow][src_app] {
           mutate {
             id => "elastiflow_add_missing_src_app_w_vlan_or_site"
@@ -151,6 +151,6 @@ filter {
           }
         }
   }
-}
+} #}
 
 
