@@ -31,7 +31,8 @@ filter {
             id => "elastiflow_add_missing_site_as_srcext"
             add_field => { "[flow][src_site]" => "external"}
           }
-        } else if ! [flow][dst_site] {
+        } 
+        if ! [flow][dst_site] {
            mutate {
             id => "elastiflow_add_missing_site_as_dstext"
             add_field => { "[flow][dst_site]" => "external"}
@@ -66,7 +67,8 @@ filter {
             id => "elastiflow_add_missing_sgrp_as_site"
             add_field => { "[flow][src_grp]" => "%{[flow][src_site]}" }
           }
-        } else if ![flow][dst_grp] {
+        }
+        if ![flow][dst_grp] {
           mutate {
             id => "elastiflow_add_missing_dgrp_as_site"
             add_field => { "[flow][dst_grp]" => "%{[flow][dst_site]}" }
@@ -129,7 +131,8 @@ filter {
               "[flow][src_app]" => "%{[flow][src_grp]}"
             }
           }
-        } else if ![flow][dst_app] {
+        }
+        if ![flow][dst_app] {
           mutate {
             id => "elastiflow_add_missing_dst_app_w_vlan_or_site"
             add_field => { 
@@ -144,7 +147,8 @@ filter {
               "[flow][src_cluster]" => "%{[flow][src_app]}"
             }
           }
-        } else if ![flow][dst_cluster] {
+        }
+        if ![flow][dst_cluster] {
           mutate {
             id => "elastiflow_add_missing_dst_cluster_w_app"
             add_field => { 
