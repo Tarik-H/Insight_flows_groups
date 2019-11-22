@@ -80,9 +80,14 @@
 
   tasks:
     #- debug: var=vars
-    - name: Copy filter config file to target /conf.d 
-      copy:
-        src: "./data/20_filter_92_post_process.logstash.conf"
-        dest: "/etc/elastiflow/logstash/elastiflow/conf.d"
-        force: yes
+    # - name: Copy filter config file to target /conf.d 
+    #   copy:
+    #     src: "./data/20_filter_92_post_process.logstash.conf"
+    #     dest: "/etc/elastiflow/logstash/elastiflow/conf.d/"
+    #     force: yes
 
+    - name: test ls
+      command: "ls /etc/elastiflow/logstash/elastiflow/conf.d/"
+      register: ls_out
+    - debug:
+        msg: "{{ls_out}}"
