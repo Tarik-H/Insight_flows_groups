@@ -1,0 +1,52 @@
+<joblist>
+  <job>
+    <defaultTab>summary</defaultTab>
+    <description></description>
+    <dispatch>
+      <excludePrecedence>true</excludePrecedence>
+      <keepgoing>true</keepgoing>
+      <rankOrder>ascending</rankOrder>
+      <successOnEmptyNodeFilter>true</successOnEmptyNodeFilter>
+      <threadcount>1</threadcount>
+    </dispatch>
+    <executionEnabled>true</executionEnabled>
+    <id>f5c48b55-9d35-43ee-a38f-61d9c2028440</id>
+    <loglevel>INFO</loglevel>
+    <name>02_Push_grouping_to_host</name>
+    <nodeFilterEditable>true</nodeFilterEditable>
+    <nodefilters>
+      <filter>.*</filter>
+    </nodefilters>
+    <nodesSelectedByDefault>true</nodesSelectedByDefault>
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <node-step-plugin type='com.batix.rundeck.plugins.AnsiblePlaybookWorflowNodeStep'>
+          <configuration>
+            <entry key='ansible-base-dir-path' value='/var/rundeck/projects/Insight_flows_groups/scm/' />
+            <entry key='ansible-become' value='true' />
+            <entry key='ansible-become-method' value='sudo' />
+            <entry key='ansible-become-password-storage-path' value='keys/sudo_pass' />
+            <entry key='ansible-playbook' value='/var/rundeck/projects/Insight_flows_groups/scm/02_deploy_groups.yml' />
+          </configuration>
+        </node-step-plugin>
+      </command>
+      <pluginConfig>
+        <LogFilter type='mask-passwords'>
+          <config>
+            <replacement>[SECURE]</replacement>
+          </config>
+        </LogFilter>
+        <LogFilter type='quiet-output'>
+          <config>
+            <loglevel>verbose</loglevel>
+            <matchLoglevel>normal</matchLoglevel>
+            <quietMatch>true</quietMatch>
+            <regex>^\wnsible</regex>
+          </config>
+        </LogFilter>
+      </pluginConfig>
+    </sequence>
+    <uuid>f5c48b55-9d35-43ee-a38f-61d9c2028440</uuid>
+  </job>
+</joblist>

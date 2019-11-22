@@ -1,0 +1,64 @@
+<joblist>
+  <job>
+    <context>
+      <options preserveOrder='true'>
+        <option name='excel_file' required='true' type='file' />
+        <option name='host_ip' regex='\A(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\z' required='true'>
+          <description>Please Enter host logstash IP address</description>
+        </option>
+        <option name='host_user' required='true' secure='true' storagePath='keys/sudo_root' valueExposed='true'>
+          <description>Username</description>
+        </option>
+        <option name='host_password' required='true' secure='true' storagePath='keys/sudo_pass' valueExposed='true' />
+      </options>
+    </context>
+    <defaultTab>summary</defaultTab>
+    <description></description>
+    <dispatch>
+      <excludePrecedence>true</excludePrecedence>
+      <keepgoing>true</keepgoing>
+      <rankOrder>ascending</rankOrder>
+      <successOnEmptyNodeFilter>true</successOnEmptyNodeFilter>
+      <threadcount>1</threadcount>
+    </dispatch>
+    <executionEnabled>true</executionEnabled>
+    <id>79a5d595-1af9-484f-abc5-db3c4f15cfef</id>
+    <loglevel>INFO</loglevel>
+    <name>01_Create_grouping_in_pipeline</name>
+    <nodeFilterEditable>true</nodeFilterEditable>
+    <nodefilters>
+      <filter>.*</filter>
+    </nodefilters>
+    <nodesSelectedByDefault>true</nodesSelectedByDefault>
+    <scheduleEnabled>true</scheduleEnabled>
+    <sequence keepgoing='false' strategy='node-first'>
+      <command>
+        <step-plugin type='com.batix.rundeck.plugins.AnsiblePlaybookWorkflowStep'>
+          <configuration>
+            <entry key='ansible-base-dir-path' value='/var/rundeck/projects/Insight_flows_groups/scm/' />
+            <entry key='ansible-become' value='false' />
+            <entry key='ansible-disable-limit' value='false' />
+            <entry key='ansible-extra-vars' value='excel_filepath: ${file.excel_file}&#10;excel_filename: ${file.excel_file.fileName}&#10;host_ip: ${option.host_ip}&#10;host_user: ${option.host_user}&#10;host_password: ${option.host_password}' />
+            <entry key='ansible-playbook' value='/var/rundeck/projects/Insight_flows_groups/scm/01_create_groups.yml' />
+          </configuration>
+        </step-plugin>
+      </command>
+      <pluginConfig>
+        <LogFilter type='mask-passwords'>
+          <config>
+            <replacement>[SECURE]</replacement>
+          </config>
+        </LogFilter>
+        <LogFilter type='quiet-output'>
+          <config>
+            <loglevel>verbose</loglevel>
+            <matchLoglevel>normal</matchLoglevel>
+            <quietMatch>true</quietMatch>
+            <regex>^\wnsible</regex>
+          </config>
+        </LogFilter>
+      </pluginConfig>
+    </sequence>
+    <uuid>79a5d595-1af9-484f-abc5-db3c4f15cfef</uuid>
+  </job>
+</joblist>
