@@ -72,22 +72,22 @@
       meta: refresh_inventory
     
 
-- name: Copy file to data processing pipeline host
-  hosts: logstash
-  remote_user: root
-  #connection: local
-  #gather_facts: yes
+# - name: Copy file to data processing pipeline host
+#   hosts: logstash
+#   remote_user: root
+#   #connection: local
+#   #gather_facts: yes
 
-  tasks:
-    #- debug: var=vars
-    # - name: Copy filter config file to target /conf.d 
-    #   copy:
-    #     src: "./data/20_filter_92_post_process.logstash.conf"
-    #     dest: "/etc/elastiflow/logstash/elastiflow/conf.d/"
-    #     force: yes
+#   tasks:
+#     #- debug: var=vars
+#     # - name: Copy filter config file to target /conf.d 
+#     #   copy:
+#     #     src: "./data/20_filter_92_post_process.logstash.conf"
+#     #     dest: "/etc/elastiflow/logstash/elastiflow/conf.d/"
+#     #     force: yes
 
-    - name: test ls
-      command: "ls /etc/elastiflow/logstash/elastiflow/conf.d/"
-      register: ls_out
-    - debug:
-        msg: "{{ls_out}}"
+#     - name: test ls
+#       command: "ls /etc/elastiflow/logstash/elastiflow/conf.d/"
+#       register: ls_out
+#     - debug:
+#         msg: "{{ls_out}}"
