@@ -22,5 +22,5 @@
         #dest: "/etc/elastiflow/logstash/elastiflow/conf.d"
         dest: "/elastiflow/logstash/elastiflow/conf.d"
         force: yes
-      # become: yes
-      # become_user: root
+      become: yes
+      become_user: root
