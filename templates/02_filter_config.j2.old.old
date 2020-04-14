@@ -1,0 +1,74 @@
+# {{ ansible_managed }}
+filter {
+  # Logic to add IP groups and possibly sites.
+  # Logic to add IP src and dst groups
+    if [flow][server_addr] or [flow][client_addr] {
+{% if custom_apps %}
+{%for k,v in custom_apps.iteritems() %}
+{% if k and v %}
+        cidr {
+          id => "elastiflow_cust_src_grp_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i}}/32"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_grp]" => "{{k}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_cust_dst_grp_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i}}/32"{%if not loop.last%},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_grp]" => "{{k}}"
+          }
+        }
+{%endif%}
+{%endfor%}
+{%endif%}
+{% if dc_networks %}
+{%for k,v in dc_networks.iteritems() %}
+{% if k and v %}
+        cidr {
+          id => "elastiflow_cust_src_grp_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_grp]" => "{{k}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_cust_dst_grp_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_grp]" => "{{k}}"
+          }
+        }
+{%endif%}
+{%endfor%}
+{%endif%}
+{% if lan_networks %}
+{%for k,v in lan_networks.iteritems() %}
+{% if k and v %}
+        cidr {
+          id => "elastiflow_cust_src_grp_{{k}}"
+          address => [ "%{[flow][client_addr]}" ]
+          network => [{%for i in v %}"{{i}}"{% if not loop.last %},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][src_grp]" => "{{k}}"
+          }
+        }
+        cidr {
+          id => "elastiflow_cust_dst_grp_{{k}}"
+          address => [ "%{[flow][server_addr]}" ]
+          network => [{%for i in v %}"{{i}}"{%if not loop.last%},{%endif%}{%endfor%}]
+          add_field => {
+            "[flow][dst_grp]" => "{{k}}"
+          }
+        }
+{%endif%}
+{%endfor%}
+{%endif%}
+    }
+}
+

@@ -1,0 +1,40 @@
+---
+- name: Test Vcenter
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    vcenter_hostname: "172.28.46.30"
+    vcenter_username: "administrator@vsphere.local"
+    vcenter_password: "Inl@b2014"
+#    vcenter_password: "Insight2019!"
+
+  tasks:
+
+    # - name: Gather some information about a guest using MoID
+    #   vmware_guest_facts:
+    #     hostname: "{{ vcenter_hostname }}"
+    #     username: "{{ vcenter_username }}"
+    #     password: "{{ vcenter_password }}"
+    #     validate_certs: no
+    #     datacenter: "{{ datacenter_name }}"
+    #     moid: vm-42
+    #     schema: "vsphere"
+    #     properties: ["config.hardware.memoryMB", "guest.disk", "overallStatus"]
+    #   delegate_to: localhost
+    #   register: vm_moid_info
+
+    - name: Gather all registered virtual machines
+      vmware_vm_info:
+        hostname: '{{ vcenter_hostname }}'
+        username: '{{ vcenter_username }}'
+        password: '{{ vcenter_password }}'
+        validate_certs: no
+        show_attribute: yes
+#        show_tag: yes
+      delegate_to: localhost
+      register: vminfo
+
+    - debug:
+        var: vminfo.virtual_machines    
+#        var: vminfo

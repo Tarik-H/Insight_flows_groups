@@ -2,13 +2,13 @@
 filter {
   # Logic to add sites, groups for apps and possibly vlans.
   # Logic to add src and dst sites
-    if [flow][server_addr] or [flow][client_addr] {
+    if [server][ip] or [client][ip] {
 {% if sites %}
 {%for k,v in sites.iteritems() %}
 {% if k and v %}
         cidr {
           id => "elastiflow_src_site_{{k}}"
-          address => [ "%{[flow][client_addr]}" ]
+          address => [ "%{[client][ip]}" ]
           network => [{%for i in v %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_site]" => "{{k}}"
@@ -16,7 +16,7 @@ filter {
         }
         cidr {
           id => "elastiflow_cust_dst_site_{{k}}"
-          address => [ "%{[flow][server_addr]}" ]
+          address => [ "%{[server][ip]}" ]
           network => [{%for i in v %}"{{i|ipaddr}}"{%if not loop.last%},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_site]" => "{{k}}"
@@ -44,7 +44,7 @@ filter {
 {% if k and v %}
         cidr {
           id => "elastiflow_src_vlan_{{k}}"
-          address => [ "%{[flow][client_addr]}" ]
+          address => [ "%{[client][ip]}" ]
           network => [{%for i in v %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_grp]" => "{{k}}"
@@ -52,7 +52,7 @@ filter {
         }
         cidr {
           id => "elastiflow_dst_vlan_{{k}}"
-          address => [ "%{[flow][server_addr]}" ]
+          address => [ "%{[server][ip]}" ]
           network => [{%for i in v %}"{{i|ipaddr}}"{%if not loop.last%},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_grp]" => "{{k}}"
@@ -82,7 +82,7 @@ filter {
       # Adding applications
         cidr {
           id => "elastiflow_cust_src_app_{{k}}"
-          address => [ "%{[flow][client_addr]}" ]
+          address => [ "%{[client][ip]}" ]
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_app]" => "{{k}}"
@@ -91,7 +91,7 @@ filter {
         }
         cidr {
           id => "elastiflow_cust_dst_app_{{k}}"
-          address => [ "%{[flow][server_addr]}" ]
+          address => [ "%{[server][ip]}" ]
           network => [{%for i in v %}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_app]" => "{{k}}"
@@ -104,7 +104,7 @@ filter {
 {{app_cluster.append(inter.cluster)}}
         cidr {
           id => "elastiflow_src_cluster_app:_{{k}}_{{inter.cluster}}"
-          address => [ "%{[flow][client_addr]}" ]
+          address => [ "%{[client][ip]}" ]
           network => [{%for i in v if (i.cluster|lower==inter.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][src_cluster]" => "{{k}}:_{{inter.cluster}}"
@@ -112,7 +112,7 @@ filter {
         }      
         cidr {
           id => "elastiflow_dst_cluster_app:_{{k}}_{{inter.cluster}}"
-          address => [ "%{[flow][server_addr]}" ]
+          address => [ "%{[server][ip]}" ]
           network => [{%for i in v if (i.cluster|lower==inter.cluster|lower)%}"{{i.host_ip|ipaddr('host')}}"{% if not loop.last %},{%endif%}{%endfor%}]
           add_field => {
             "[flow][dst_cluster]" => "{{k}}:_{{inter.cluster}}"
