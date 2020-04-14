@@ -8,18 +8,19 @@
 
 
 
-    - name: test ls
-      command: "ls /etc/elastiflow/logstash/elastiflow/conf.d/"
-      register: ls_out
-    - debug:
-        msg: "{{ls_out}}"    
+    # - name: test ls
+    #   command: "ls /etc/elastiflow/logstash/elastiflow/conf.d/"
+    #   register: ls_out
+    # - debug:
+    #     msg: "{{ls_out}}"    
     # - ping:
     # # - name: Clear gathered facts from all currently targeted hosts
     # #   meta: clear_facts
-    # - name: Copy filter config file to target /conf.d
-    #   copy:
-    #     src: "./data/20_filter_92_post_process.logstash.conf"
-    #     dest: "/etc/elastiflow/logstash/elastiflow/conf.d"
-    #     force: yes
-    #   # become: yes
-    #   # become_user: root
+    - name: Copy filter config file to target /conf.d
+      copy:
+        src: "./data/20_filter_92_post_process.logstash.conf"
+        #dest: "/etc/elastiflow/logstash/elastiflow/conf.d"
+        dest: "/elastiflow/logstash/elastiflow/conf.d"
+        force: yes
+      # become: yes
+      # become_user: root
