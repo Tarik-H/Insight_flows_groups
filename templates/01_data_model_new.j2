@@ -1,8 +1,15 @@
 # {{ ansible_managed }}
+{% set company_cidr = spreadsheet_Company_cidr %}
 {% set dc_vlans = spreadsheet_DC_vlans_optional %}
 {% set site_net = spreadsheet_Sites_networks %}
 {% set cust_app = spreadsheet_Application_identifier %}
 ---
+
+all_cidr:
+{% for net in company_cidr if (net.Company_network_range|ipaddr) -%}
+  - {{net.Company_network_range|ipaddr}}
+{% endfor                   %}
+
 {% set sites_temp= [] %}
 sites:
 {% for net in site_net if (net.networks|ipaddr) and (net.site_identifier) and (net.site_identifier not in sites_temp) -%}
