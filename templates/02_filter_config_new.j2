@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-# test1
+# test2
 filter {
   # Logic to add sites, groups for apps and possibly vlans.
   # Logic to add src and dst sites
@@ -26,6 +26,26 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
+
+{%if all_cidr %}
+  # Assign site from company cidr if missing
+        if ![flow][src_site] {
+           cidr {
+            id => "elastiflow_add_missing_site_as_src_allcidr"
+            address => [ "%{[client][ip]}" ]
+            network => [{%for i in all_cidr %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
+            add_field => { "[flow][src_site]" => "{{i}}"}
+          }
+        }
+        if ![flow][dst_site] {
+           cidr {
+            id => "elastiflow_add_missing_site_as_dst_allcidr"
+            address => [ "%{[server][ip]}" ]
+            network => [{%for i in all_cidr %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
+            add_field => { "[flow][dst_site]" => "{{i}}"}
+          }
+        }
+{%endif%}
   # Assign default ext site if missing
         if ![flow][src_site] {
            mutate {
@@ -33,12 +53,13 @@ filter {
             add_field => { "[flow][src_site]" => "external"}
           }
         } 
-        if ! [flow][dst_site] {
+        if ![flow][dst_site] {
            mutate {
             id => "elastiflow_add_missing_site_as_dstext"
             add_field => { "[flow][dst_site]" => "external"}
           }
         }
+     
 {% if dc_vlans %}
       # Logic to add DC vlans when available
 {%for k,v in dc_vlans.iteritems() %}
