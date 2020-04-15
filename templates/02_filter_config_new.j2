@@ -34,7 +34,7 @@ filter {
             id => "elastiflow_add_missing_site_as_src_allcidr"
             address => [ "%{[client][ip]}" ]
             network => [{%for i in all_cidr %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
-            add_field => { "[flow][src_site]" => "{{i}}"}
+            add_field => { "[flow][src_site]" => "internal_others"}
           }
         }
         if ![flow][dst_site] {
@@ -42,7 +42,7 @@ filter {
             id => "elastiflow_add_missing_site_as_dst_allcidr"
             address => [ "%{[server][ip]}" ]
             network => [{%for i in all_cidr %}"{{i|ipaddr}}"{% if not loop.last %},{%endif%}{%endfor%}]
-            add_field => { "[flow][dst_site]" => "{{i}}"}
+            add_field => { "[flow][dst_site]" => "internal_others"}
           }
         }
 {%endif%}
@@ -59,7 +59,7 @@ filter {
             add_field => { "[flow][dst_site]" => "external"}
           }
         }
-     
+
 {% if dc_vlans %}
       # Logic to add DC vlans when available
 {%for k,v in dc_vlans.iteritems() %}
