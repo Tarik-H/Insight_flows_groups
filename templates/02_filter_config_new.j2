@@ -83,6 +83,21 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
+
+  # Assign shared services as vlan
+        if [source][port] in ["53","68","110","111","123","143","220","25","389","465","514","587","601","636","993","995","2049","3268","3269"] {
+          mutate {
+              id => "elastiflow_add_src_vlan_shared_srvc"
+              add_field => {"[flow][src_grp]" => "Shared_Services"}
+          }
+        } else if [destination][port] in ["53","68","110","111","123","143","220","25","389","465","514","587","601","636","993","995","2049","3268","3269"] {
+          mutate {
+              id => "elastiflow_add_dst_vlan_shared_srvc"
+              add_field => {"[flow][dst_grp]" => "Shared_Services"}
+          }
+        }
+
+
   # Assign default vlan as site if missing
         if ![flow][src_grp] {
           mutate {
@@ -145,6 +160,18 @@ filter {
 {%endif%}
 {%endfor%}
 {%endif%}
+  # Assign shared services as application
+        if [source][port] in ["53","68","110","111","123","143","220","25","389","465","514","587","601","636","993","995","2049","3268","3269"] {
+          mutate {
+              id => "elastiflow_add_src_app_shared_srvc"
+              add_field => {"[flow][src_app]" => "Shared_Services"}
+          }
+        } else if [destination][port] in ["53","68","110","111","123","143","220","25","389","465","514","587","601","636","993","995","2049","3268","3269"] {
+          mutate {
+              id => "elastiflow_add_dst_app_shared_srvc"
+              add_field => {"[flow][dst_app]" => "Shared_Services"}
+          }
+        }
   # Assign default apps and clusters if missing
         if ![flow][src_app] {
           mutate {
