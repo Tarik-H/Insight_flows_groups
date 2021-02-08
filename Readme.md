@@ -2,3 +2,4 @@
 This is to generate the config files only
 test2
 test3
+test4
